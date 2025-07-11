@@ -1,0 +1,18 @@
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.app-container {
+  flex: 1;
+  margin: 20px auto;
+  padding: 2rem;
+  width: 100%;
+
+  background: #dddedf;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
