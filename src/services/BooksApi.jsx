@@ -64,3 +64,15 @@ export const updateBook = async(book_id,updatedBook)=>{
     }
 }
 
+
+export const createBook = async(bookData)=>{
+    console.log("[Creating Book]");
+    try{
+        const res = await API.post("books/",bookData)
+        console.log(res.data);
+        return res.data
+    }catch(error){
+        console.log("[Failed to create Book]",error);
+        throw error;
+    }
+}

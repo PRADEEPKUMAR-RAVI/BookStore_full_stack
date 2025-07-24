@@ -23,9 +23,6 @@ export function BookItems({book}) {
 
             <p><strong>{book.categories.length>1?"Categories":"Category"} : </strong> {" "} {book.categories?.map((cat)=>cat.name).join(", ")}</p>
 
-
-
-
         </li>
 
 

@@ -1,4 +1,6 @@
 import React, { useState,useEffect } from 'react'
+import Select from 'react-select';
+import '../components/css/Books.css'
 import { useNavigate, useParams } from 'react-router'
 import { updateBook } from '../services/BooksApi'
 import {fetchBook} from '../services/BooksApi'
@@ -50,26 +52,48 @@ export const EditBook = () => {
         loadAll();
         }, [BookId]);
 
+    const categoryOptions = categories.map(cat => ({
+        value: cat.id,
+        label: cat.name,
+    }));
+
+    const handleCategoryChange = (selectedOptions) => {
+        const selectedIds = selectedOptions.map(option => option.value);
+        setForm(prev => ({
+            ...prev,
+            category_ids: selectedIds,
+        }));
+    };
+
     function handleChange(e){
-        setForm((f)=>({...f,[e.target.name]:e.target.value}))
+        const {name,type,value,checked} = e.target;
+        if(type == 'checkbox'){
+            setForm((f)=> ({...f,[name]:checked}))
+        }else{
+            setForm((f)=> ({...f,[name]:value}))
+        }
+    }
+                                                                                                            
+    async function handleSubmit(e){                                                           
+        e.preventDefault();
+        try{
+            await updateBook(BookId,form);
+            alert("Book Updated Successfully!");
+            navigate(`/books/${BookId}`)
+        }catch(error){
+            console.error("Update failed",error)
+        }
     }
 
-    function handleSubmit(e){
-        return ""
-    }
-
-    // function handleMultiple(e){
-    //     seleted = 
-    // }
 
 
     if(!form) return <p>Nothing to load....</p>
   return (
     <div className='Edit-form'>
-        <h2>Edit Form</h2>
+        <h2>Edit Book</h2>
         <form action="" onSubmit={handleSubmit}>
             <label>Book name :</label>
-            <input name="name" value={form.name} onChange={handleChange}  required /> <br />
+            <input type="text" name="name" value={form.name} onChange={handleChange}  required /> <br />
             <label >Description : </label>
             <textarea  name='description' value={form.description} onChange={handleChange} />
             <label>Author : </label>
@@ -79,14 +103,28 @@ export const EditBook = () => {
                     <option key={author.id} value={author.id}>{author.name}</option>
                 ))}
             </select>
+            <label>Category : </label>
+            <Select
+                options={categoryOptions}
+                isMulti
+                value={categoryOptions.filter(option =>
+                    form.category_ids.includes(option.value)
+                )}
+                onChange={handleCategoryChange}
+            />
 
-            <select multiple value={form.category_ids} onChange={handleMultiple}>
-                {categories.map((cat)=>(
-                    <option key={cat.id} value={cat.id}>{cat.name}</option>
-                ))}
-            </select>
-            
+            <label>Publication_Date : </label>
+            <input type='date' name='publication_date' value={form.publication_date} onChange={handleChange}/>
+            <label>Page_Count : </label>
+            <input type="number" name='page_count' value={form.page_count} onChange={handleChange} />
+            <label> Language : </label>
+            <input type="text" name='language' value={form.language} onChange={handleChange} />
+            <label >
+                <input type="checkbox" name='is_published' checked={form.is_published} onChange={handleChange} />
+                Published
+            </label>
 
+            <button type='submit'>Update</button>
         </form>
 
     </div>

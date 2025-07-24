@@ -28,17 +28,24 @@ export const BookDetails = () => {
     },[])
 
     async function handleDelete(){
-        try{
-            await deleteBook(BookId);
-            alert("Book Deleted Successfully");
-            navigate('/');
-        }catch(error){
-            throw error
+        const decision = confirm("Are you sure ..?");
+        if(decision){
+            try{
+                await deleteBook(BookId);
+                alert("Book Deleted Successfully");
+                navigate('/');
+            }catch(error){
+                throw error
+            }
         }
     }
 
     async function handleUpdate(){
         navigate(`/books/${BookId}/edit`)        
+    }
+
+    async function handleReviews() {
+        navigate(`/books/${BookId}/reviews`)        
     }
 
     if (!book) return <p>Loading book details...</p>;
@@ -71,6 +78,7 @@ export const BookDetails = () => {
             <h3>Reviews & Ratings</h3>
             <p><strong>Total Reviews:</strong> {book.total_reviews}</p>
             <p><strong>Average Rating:</strong> {book.average_rating}</p>
+            <button className='details-nav' onClick={handleReviews}>See Reviews</button>
 
             <h3>Date</h3>
             <p><strong>Created At:</strong> {new Date(book.created_at).toLocaleString()}</p>

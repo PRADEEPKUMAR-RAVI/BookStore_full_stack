@@ -35,3 +35,36 @@ export const fetchAuthor =async(AuthorId)=>{
         throw error
     }
 }
+
+export const deleteAuthor = async(AuthorId)=>{
+    console.log("[Deleting Author]")
+    try{
+        const res = await API.delete(`authors/${AuthorId}`)
+        console.log(res.msg)
+    }catch(error){
+        console.log("[Failed to Delete Author]");
+        throw error;
+    }
+}
+
+export const updateAuthor = async(AuthorId,updatedData)=>{
+    console.log("[updating Author]");
+    try{
+        const res = await API.put(`authors/${AuthorId}`,updatedData)
+        console.log("raw thing ----------",res);
+        return res.data
+    }catch(error){
+        throw error;
+    }
+}
+
+export const createAuthor = async(authorData)=>{
+    console.log("[Creating Author]");
+    try{
+        const res = await API.post('authors/',authorData);
+        console.log("Author Created", res.data);
+        return res.data;
+    }catch(error){
+        throw error;
+    }
+}
